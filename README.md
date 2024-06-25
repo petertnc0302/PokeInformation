@@ -14,11 +14,11 @@ The app displays detailed information about various Pokémon, including their ba
     
 #API Service
 
-* [PokeAPI] (https://pokeapi.co/)
+* [PokeAPI](https://pokeapi.co/)
 
 #Packages
 
-* SDWebImage for loading images. (https://github.com/SDWebImage/SDWebImage.git)
+* [SDWebImage for loading images](https://github.com/SDWebImage/SDWebImage.git)
 
 #Framework
 
