@@ -7,10 +7,14 @@
 
 import UIKit
 
-class PokemonCollectionViewController: UIViewController {
+class PokemonCollectionViewController: BaseViewController, UINavigationControllerDelegate, LoadingIndicatorPresenter {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var noFoundsLabel: UILabel!
+    
+    var activityIndicator = UIActivityIndicatorView()
+    let searchController = UISearchController(searchResultsController: nil)
     
     var pokemons = [Pokemon]()
     var filteredPokemons = Set<Pokemon>()
@@ -18,39 +22,65 @@ class PokemonCollectionViewController: UIViewController {
     
     var currentPage = 1
     var isFetching = false
-
-    let searchController = UISearchController(searchResultsController: nil)
+    var selectedPokemon: Pokemon?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.title = "Pokémon"
-        
+        activityIndicator.isHidden = true
         collectionView.delegate = self
         collectionView.dataSource = self
-        
-        super.viewDidLoad()
-        
-        self.title = "Danh sách Pokémon"
-        
-        collectionView.delegate = self
-        collectionView.dataSource = self
-                
-        // Fetch Pokémon list from API
-        guard !isFetching else {
-            return
-        }
-        isFetching = true
-        
-        pokeAPIService.fetchPokemons (page: currentPage){ [weak self] pokemons in
-            self?.pokemons = pokemons
-            self?.filteredPokemons = Set(pokemons)
-            self?.collectionView.reloadData()
-            self?.isFetching = false
-        }
         
         // Setup search bar
         setupSearchBar()
+        
+        // Setup Refresh Control
+        setupRefreshControl()
+        
+        // Fetch Pokémon list from API
+        fetchPokemons()
+    }
+    
+    private func setupRefreshControl() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
+    }
+
+    @objc private func handleRefresh(_ refreshControl: UIRefreshControl) {
+        reload()
+        refreshControl.endRefreshing()
+    }
+    
+    func reload() {
+        currentPage = 1
+        pokemons.removeAll()
+        filteredPokemons.removeAll()
+        collectionView.reloadData()
+        fetchPokemons()
+    }
+    
+    private func fetchPokemons() {
+        guard !isFetching else { return }
+        isFetching = true
+        
+        showActivityIndicator()
+        self.pokeAPIService.fetchPokemons(page: self.currentPage) { [weak self] pokemons, error  in
+            self?.hideActivityIndicator()
+            if let error = error {
+                DispatchQueue.main.async {
+                    self?.showAlert(title: "Error", message: error.localizedDescription)
+                    self?.isFetching = false
+                }
+                return
+            }
+            self?.pokemons.append(contentsOf: pokemons)
+            self?.filteredPokemons.formUnion(pokemons)
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+                self?.isFetching = false
+            }
+        }
+       
     }
     
     // MARK: - UISearchBar
@@ -58,7 +88,6 @@ class PokemonCollectionViewController: UIViewController {
     private func setupSearchBar() {
         searchBar.placeholder = "Search Pokémon"
         searchBar.delegate = self
-        navigationItem.titleView = searchBar
     }
 }
 
@@ -81,28 +110,28 @@ extension PokemonCollectionViewController: UICollectionViewDataSource {
         let index = filteredPokemons.index(filteredPokemons.startIndex, offsetBy: indexPath.item)
 
         let pokemon = filteredPokemons[index]
-        cell.nameLabel.text = pokemon.name.capitalized
-        let imageUrl = URL(string: pokemon.imageUrl)!
-        getData(from: imageUrl) { data, response, error in
-            guard let data = data, error == nil else { return }
-            DispatchQueue.main.async() {
-                cell.imageView.image = UIImage(data: data)
-            }
-        }
+        cell.nameLabel.text = pokemon.name.uppercased()
+        cell.idLabel.text = String(format: "#%03d", pokemon.id)
+        cell.setColor(type: pokemon.types?.first?.type.name)
+        cell.configure(with: pokemon.imageUrl)
+
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.item == pokemons.count - 1 && !isFetching {
             currentPage += 1
-            pokeAPIService.fetchPokemons(page: currentPage) { [weak self] newPokemons in
-                self?.pokemons.append(contentsOf: newPokemons)
-                self?.filteredPokemons.formUnion(newPokemons)
-                DispatchQueue.main.async {
-                    self?.collectionView.reloadData()
-                }
-            }
+            fetchPokemons()
         }
+    }
+    
+     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+         let index = filteredPokemons.index(filteredPokemons.startIndex, offsetBy: indexPath.item)
+         selectedPokemon = filteredPokemons[index]
+         let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "PokemonDetailViewController") as! PokemonDetailViewController
+         secondViewController.pokemon = selectedPokemon
+         self.navigationController?.pushViewController(secondViewController, animated: true)
+         hideTabBar()
     }
 }
 
@@ -134,35 +163,33 @@ extension PokemonCollectionViewController: UICollectionViewDelegateFlowLayout {
 
 extension PokemonCollectionViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        // Xử lý thay đổi văn bản trong ô tìm kiếm
         filterContentForSearchText(searchText)
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        // Xử lý khi người dùng bấm vào nút huỷ
         searchBar.text = ""
         filterContentForSearchText("")
-        searchBar.resignFirstResponder() // Ẩn bàn phím
+        searchBar.resignFirstResponder()
+        noFoundsLabel.isHidden = true
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        // Xử lý khi người dùng bấm vào nút tìm kiếm trên bàn phím
         if let searchText = searchBar.text {
             filterContentForSearchText(searchText)
         }
-        searchBar.resignFirstResponder() // Ẩn bàn phím
+        searchBar.resignFirstResponder()
     }
 
     func filterContentForSearchText(_ searchText: String) {
-        // Viết phương thức để lọc nội dung dựa trên searchText
-        // Ví dụ:
         if searchText.isEmpty {
             filteredPokemons = Set(pokemons)
         } else {
-            filteredPokemons = Set(pokemons.filter {
-                $0.name.range(of: searchText, options: .caseInsensitive)
-                != nil
-            })
+            filteredPokemons = Set(pokemons.filter { $0.name.range(of: searchText, options: .caseInsensitive) != nil })
+            if filteredPokemons.isEmpty {
+                noFoundsLabel.isHidden = false
+            } else {
+                noFoundsLabel.isHidden = true
+            }
         }
         collectionView.reloadData()
     }

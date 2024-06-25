@@ -7,13 +7,32 @@
 
 import Foundation
 
-struct Pokemon: Hashable {
+struct PokemonResponse: Decodable {
+    let results: [PokemonData]
+}
+
+struct PokemonData: Decodable {
     let name: String
+    let url: String
+}
+
+struct Pokemon: Hashable, Decodable {
+    let name: String
+    let url: String
     let id: Int
     let imageUrl: String
+    var height: Int?
+    var weight: Int?
+    var base_experience: Int?
+    var types: [PokemonType]?
+    var stats: [PokemonStat]?
+    var abilities: [PokemonAbility]?
+    var habitat: NamedAPIResource?
+    var moves: [PokemonMove]?
     
-    init(name: String,  id: Int, imageUrl: String) {
+    init(name: String, url: String, id: Int, imageUrl: String) {
         self.name = name
+        self.url = url
         self.id = id
         self.imageUrl = imageUrl
     }
@@ -21,27 +40,8 @@ struct Pokemon: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-}
-
-struct PokemonListResponse: Codable {
-    let results: [PokemonData]
     
-    struct PokemonData: Codable {
-        let name: String
-        let url: String
-    }
-}
-
-struct PokemonInfo: Codable {
-    let id: Int
-    let name: String
-    let sprites: Sprites
-    
-    struct Sprites: Codable {
-        let frontDefault: String
-        
-        enum CodingKeys: String, CodingKey {
-            case frontDefault = "front_default"
-        }
+    static func == (lhs: Pokemon, rhs: Pokemon) -> Bool {
+        lhs.id == rhs.id
     }
 }
