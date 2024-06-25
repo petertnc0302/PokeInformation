@@ -22,6 +22,7 @@
 		5C53042C2C255E5B00E6ACD0 /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C53042B2C255E5B00E6ACD0 /* LoadingIndicator.swift */; };
 		5C53042E2C25958E00E6ACD0 /* PokemonDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C53042D2C25958E00E6ACD0 /* PokemonDetailViewController.swift */; };
 		5C5304322C25A38400E6ACD0 /* ViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5304312C25A38400E6ACD0 /* ViewController+Extensions.swift */; };
+		5C76E4632C2AAF6000DC0AB8 /* PokemonModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5C76E4612C2AAF6000DC0AB8 /* PokemonModel.xcdatamodeld */; };
 		5C8744C82C25E5B400E8D0DD /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8744C72C25E5B400E8D0DD /* FavoriteViewController.swift */; };
 		5C8744CA2C25F1CE00E8D0DD /* PokemonDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8744C92C25F1CE00E8D0DD /* PokemonDetail.swift */; };
 		5CA50A932C25FF9F00FAF41D /* InformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA50A922C25FF9F00FAF41D /* InformationViewController.swift */; };
@@ -32,7 +33,6 @@
 		5CC343002C2923610077BD01 /* InformationCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC342FF2C2923610077BD01 /* InformationCollectionReusableView.swift */; };
 		5CC343022C2924320077BD01 /* TagFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC343012C2924320077BD01 /* TagFlowLayout.swift */; };
 		5CC343042C2950560077BD01 /* StatProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC343032C2950560077BD01 /* StatProgressView.swift */; };
-		5CC343062C295AE30077BD01 /* FavoritePokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC343052C295AE30077BD01 /* FavoritePokemon.swift */; };
 		5CC343082C295AFF0077BD01 /* FavoriteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC343072C295AFF0077BD01 /* FavoriteManager.swift */; };
 		5CC3430A2C296FFC0077BD01 /* FavoriteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC343092C296FFC0077BD01 /* FavoriteTableViewCell.swift */; };
 		5CC3430F2C2A74DF0077BD01 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 5CC3430E2C2A74DF0077BD01 /* SDWebImage */; };
@@ -60,6 +60,7 @@
 		5C53042B2C255E5B00E6ACD0 /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
 		5C53042D2C25958E00E6ACD0 /* PokemonDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailViewController.swift; sourceTree = "<group>"; };
 		5C5304312C25A38400E6ACD0 /* ViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Extensions.swift"; sourceTree = "<group>"; };
+		5C76E4622C2AAF6000DC0AB8 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		5C8744C72C25E5B400E8D0DD /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
 		5C8744C92C25F1CE00E8D0DD /* PokemonDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetail.swift; sourceTree = "<group>"; };
 		5CA50A922C25FF9F00FAF41D /* InformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationViewController.swift; sourceTree = "<group>"; };
@@ -70,7 +71,6 @@
 		5CC342FF2C2923610077BD01 /* InformationCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationCollectionReusableView.swift; sourceTree = "<group>"; };
 		5CC343012C2924320077BD01 /* TagFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFlowLayout.swift; sourceTree = "<group>"; };
 		5CC343032C2950560077BD01 /* StatProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatProgressView.swift; sourceTree = "<group>"; };
-		5CC343052C295AE30077BD01 /* FavoritePokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritePokemon.swift; sourceTree = "<group>"; };
 		5CC343072C295AFF0077BD01 /* FavoriteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteManager.swift; sourceTree = "<group>"; };
 		5CC343092C296FFC0077BD01 /* FavoriteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewCell.swift; sourceTree = "<group>"; };
 		5CC343122C2A74FF0077BD01 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
@@ -110,8 +110,8 @@
 		5C2E1F002C22C5E0005F7CE7 /* PokeInformation */ = {
 			isa = PBXGroup;
 			children = (
-				5CA50A982C2618AF00FAF41D /* extensions */,
-				5CEDB5882C23629100EB6758 /* resource */,
+				5CA50A982C2618AF00FAF41D /* Extensions */,
+				5CEDB5882C23629100EB6758 /* Resource */,
 				5C2E1F192C22C67E005F7CE7 /* Delegate */,
 				5C2E1F182C22C667005F7CE7 /* View */,
 				5C2E1F172C22C65B005F7CE7 /* Model */,
@@ -119,6 +119,7 @@
 				5C2E1F152C22C634005F7CE7 /* Controller */,
 				5C2E1F0A2C22C5E1005F7CE7 /* Assets.xcassets */,
 				5C2E1F0F2C22C5E1005F7CE7 /* Info.plist */,
+				5C76E4612C2AAF6000DC0AB8 /* PokemonModel.xcdatamodeld */,
 			);
 			path = PokeInformation;
 			sourceTree = "<group>";
@@ -149,7 +150,6 @@
 			children = (
 				5C2E1F1A2C22C69D005F7CE7 /* Pokemon.swift */,
 				5C8744C92C25F1CE00E8D0DD /* PokemonDetail.swift */,
-				5CC343052C295AE30077BD01 /* FavoritePokemon.swift */,
 				5CC343072C295AFF0077BD01 /* FavoriteManager.swift */,
 			);
 			path = Model;
@@ -181,7 +181,7 @@
 			path = Delegate;
 			sourceTree = "<group>";
 		};
-		5CA50A982C2618AF00FAF41D /* extensions */ = {
+		5CA50A982C2618AF00FAF41D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				5CA50A992C2618E600FAF41D /* Color+Extension.swift */,
@@ -190,16 +190,16 @@
 				5C1D2DA92C274E9200289944 /* UIImage+Extension.swift */,
 				5CC343122C2A74FF0077BD01 /* UIImageView+Extension.swift */,
 			);
-			path = extensions;
+			path = Extensions;
 			sourceTree = "<group>";
 		};
-		5CEDB5882C23629100EB6758 /* resource */ = {
+		5CEDB5882C23629100EB6758 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
 				5CEDB5892C2362A500EB6758 /* Utils.swift */,
 				5C53042B2C255E5B00E6ACD0 /* LoadingIndicator.swift */,
 			);
-			path = resource;
+			path = Resource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -282,7 +282,6 @@
 			files = (
 				5CC343132C2A74FF0077BD01 /* UIImageView+Extension.swift in Sources */,
 				5CA50A952C25FFB400FAF41D /* StatsViewController.swift in Sources */,
-				5CC343062C295AE30077BD01 /* FavoritePokemon.swift in Sources */,
 				5CA50A932C25FF9F00FAF41D /* InformationViewController.swift in Sources */,
 				5C2E1F062C22C5E0005F7CE7 /* PokemonCollectionViewController.swift in Sources */,
 				5C8744C82C25E5B400E8D0DD /* FavoriteViewController.swift in Sources */,
@@ -308,6 +307,7 @@
 				5CA50A9A2C2618E600FAF41D /* Color+Extension.swift in Sources */,
 				5C8744CA2C25F1CE00E8D0DD /* PokemonDetail.swift in Sources */,
 				5C53042E2C25958E00E6ACD0 /* PokemonDetailViewController.swift in Sources */,
+				5C76E4632C2AAF6000DC0AB8 /* PokemonModel.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -552,6 +552,19 @@
 			productName = SDWebImageMapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		5C76E4612C2AAF6000DC0AB8 /* PokemonModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				5C76E4622C2AAF6000DC0AB8 /* Model.xcdatamodel */,
+			);
+			currentVersion = 5C76E4622C2AAF6000DC0AB8 /* Model.xcdatamodel */;
+			path = PokemonModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 5C2E1EF62C22C5E0005F7CE7 /* Project object */;
 }

@@ -45,3 +45,35 @@ struct Pokemon: Hashable, Decodable {
         lhs.id == rhs.id
     }
 }
+
+extension Pokemon {
+    init(entity: FavoritePokemon) {
+        self.name = entity.name ?? ""
+        self.url = ""
+        self.id = Int(entity.id)
+        self.imageUrl = entity.imageUrl ?? ""
+        self.height = Int(entity.height)
+        self.weight = Int(entity.weight)
+        self.base_experience = Int(entity.base_experience)
+
+        if let typesData = entity.types {
+            self.types = try? JSONDecoder().decode([PokemonType].self, from: typesData)
+        }
+
+        if let statsData = entity.stats {
+            self.stats = try? JSONDecoder().decode([PokemonStat].self, from: statsData)
+        }
+
+        if let abilitiesData = entity.abilities {
+            self.abilities = try? JSONDecoder().decode([PokemonAbility].self, from: abilitiesData)
+        }
+        
+        if let habitatData = entity.habitat {
+            self.habitat = try? JSONDecoder().decode(NamedAPIResource.self, from: habitatData)
+        }
+        
+        if let movesData = entity.moves {
+            self.moves = try? JSONDecoder().decode([PokemonMove].self, from: movesData)
+        }
+    }
+}

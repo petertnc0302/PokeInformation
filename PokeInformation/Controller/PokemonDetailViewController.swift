@@ -17,7 +17,7 @@ class PokemonDetailViewController: UIViewController {
     @IBOutlet weak var favoriteButton: UIBarButtonItem!
     @IBOutlet weak var containerView: UIView!
     
-    var pokemon: Pokemon?
+    var pokemon: Pokemon!
     
     private lazy var firstViewController: InformationViewController = {
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
@@ -114,24 +114,13 @@ class PokemonDetailViewController: UIViewController {
     
     @IBAction func toggleFavorite(_ sender: Any) {
         guard let pokemon = pokemon else { return }
-        let favorite = FavoritePokemon(
-            id: pokemon.id,
-            name: pokemon.name,
-            imageUrl: pokemon.imageUrl,
-            url: pokemon.url,
-            height: pokemon.height,
-            weight: pokemon.weight,
-            base_experience: pokemon.base_experience,
-            types: pokemon.types,
-            stats: pokemon.stats,
-            abilities: pokemon.abilities,
-            habitat: pokemon.habitat,
-            moves: pokemon.moves
-        )
-        if FavoriteManager.shared.isFavorite(favorite) {
-            FavoriteManager.shared.removeFavorite(favorite)
+        let isFavorite = FavoriteManager.shared.isFavorite(pokemon: pokemon)
+        if isFavorite {
+            if let pokemonEntity = FavoriteManager.shared.getAllFavorites().first(where: { $0.id == pokemon.id }) {
+                FavoriteManager.shared.removePokemonFromFavorites(pokemon: pokemonEntity)
+            }
         } else {
-            FavoriteManager.shared.addFavorite(favorite)
+            FavoriteManager.shared.addPokemonToFavorites(pokemon: pokemon)
         }
         NotificationCenter.default.post(name: NSNotification.Name("FavoritesUpdated"), object: nil)
         updateFavoriteButton()
@@ -139,21 +128,8 @@ class PokemonDetailViewController: UIViewController {
     
     private func updateFavoriteButton() {
         guard let pokemon = pokemon else { return }
-        let favorite = FavoritePokemon(
-            id: pokemon.id,
-            name: pokemon.name,
-            imageUrl: pokemon.imageUrl,
-            url: pokemon.url,
-            height: pokemon.height,
-            weight: pokemon.weight,
-            base_experience: pokemon.base_experience,
-            types: pokemon.types,
-            stats: pokemon.stats,
-            abilities: pokemon.abilities,
-            habitat: pokemon.habitat,
-            moves: pokemon.moves
-        )
-        if FavoriteManager.shared.isFavorite(favorite) {
+        let isFavorite = FavoriteManager.shared.isFavorite(pokemon: pokemon)
+        if isFavorite {
             favoriteButton.image = UIImage(systemName: "heart.fill")
         } else {
             favoriteButton.image = UIImage(systemName: "heart")

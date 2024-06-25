@@ -31,7 +31,7 @@ class FavoriteViewController: BaseViewController, UITableViewDataSource, UITable
     }
     
     private func loadFavorites() {
-        favoritePokemons = FavoriteManager.shared.getFavorites()
+        favoritePokemons = FavoriteManager.shared.getAllFavorites()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -40,7 +40,8 @@ class FavoriteViewController: BaseViewController, UITableViewDataSource, UITable
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteTableViewCell", for: indexPath) as! FavoriteTableViewCell
-        let pokemon = favoritePokemons[indexPath.row]
+        let pokemonFavorite = favoritePokemons[indexPath.row]
+        let pokemon = Pokemon(entity: pokemonFavorite)
         cell.nameLabel.text = pokemon.name.uppercased()
         cell.idLabel.text = String(format: "#%03d", pokemon.id)
         cell.setColor(type: pokemon.types?.first?.type.name)
@@ -50,17 +51,8 @@ class FavoriteViewController: BaseViewController, UITableViewDataSource, UITable
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let pokemonFavorite = favoritePokemons[indexPath.row]
-        var pokemon = Pokemon(name: pokemonFavorite.name, url: pokemonFavorite.url, id: pokemonFavorite.id, imageUrl: pokemonFavorite.imageUrl)
-        pokemon.height = pokemonFavorite.height
-        pokemon.weight = pokemonFavorite.weight
-        pokemon.base_experience = pokemonFavorite.base_experience
-        pokemon.types = pokemonFavorite.types
-        pokemon.stats = pokemonFavorite.stats
-        pokemon.abilities = pokemonFavorite.abilities
-        pokemon.habitat = pokemonFavorite.habitat
-        pokemon.moves = pokemonFavorite.moves
         let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "PokemonDetailViewController") as! PokemonDetailViewController
-        secondViewController.pokemon = pokemon
+        secondViewController.pokemon = Pokemon(entity: pokemonFavorite)
         self.navigationController?.pushViewController(secondViewController, animated: true)
         hideTabBar()
 
@@ -73,7 +65,7 @@ class FavoriteViewController: BaseViewController, UITableViewDataSource, UITable
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let pokemonFavorite = favoritePokemons[indexPath.row]
-            FavoriteManager.shared.removeFavorite(pokemonFavorite)
+            FavoriteManager.shared.removePokemonFromFavorites(pokemon: pokemonFavorite)
             reloadFavorites()
         }
     }
