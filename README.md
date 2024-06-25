@@ -39,10 +39,10 @@ The app displays detailed information about various Pokémon, including their ba
 #Screenshots
 
 * Recording App: https://www.youtube.com/shorts/S0Mx1nSmV8Y
-* [Information](https://github.com/petertnc0302/PokeInformation/blob/main/detail.png?raw=true)
-* [Stats](https://github.com/petertnc0302/PokeInformation/blob/main/detail2.png?raw=true)
-* [Favorite](https://github.com/petertnc0302/PokeInformation/blob/main/favorite.png?raw=true)
-* [Pokemon](https://github.com/petertnc0302/PokeInformation/blob/main/list.png?raw=true)
+  ![Information](https://github.com/petertnc0302/PokeInformation/blob/main/detail.png?raw=true)
+  ![Stats](https://github.com/petertnc0302/PokeInformation/blob/main/detail2.png?raw=true)
+  ![Favorite](https://github.com/petertnc0302/PokeInformation/blob/main/favorite.png?raw=true)
+  ![Pokemon](https://github.com/petertnc0302/PokeInformation/blob/main/list.png?raw=true)
 
 By following this guide, you should be able to set up and run the Pokemon Information App smoothly. Enjoy exploring the world of Pokémon!
 
